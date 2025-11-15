@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Icons</title>
+</head>
+<body>
+    <canvas id="icon128" width="128" height="128"></canvas>
+    <canvas id="icon48" width="48" height="48"></canvas>
+    <canvas id="icon16" width="16" height="16"></canvas>
+
+    <script>
+        function createIcon(canvasId, size) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+
+            // Background circle
+            ctx.fillStyle = '#4285f4';
+            ctx.beginPath();
+            ctx.arc(size/2, size/2, size * 0.47, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // Draw Google "G" stylized logo (simplified for small sizes)
+            ctx.fillStyle = 'white';
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = Math.max(1, size / 32);
+
+            // Create a simplified G shape
+            const centerX = size / 2;
+            const centerY = size / 2;
+            const radius = size * 0.3;
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0.2 * Math.PI, 1.8 * Math.PI);
+            ctx.stroke();
+
+            // Add the horizontal line of G
+            ctx.beginPath();
+            ctx.moveTo(centerX + radius * 0.6, centerY);
+            ctx.lineTo(centerX + radius * 0.9, centerY);
+            ctx.stroke();
+
+            // Add color dots for larger icons
+            if (size >= 48) {
+                const dotColors = ['#ea4335', '#fbbc05', '#34a853', '#4285f4'];
+                const positions = [
+                    [centerX - radius * 0.5, centerY - radius * 0.5],
+                    [centerX + radius * 0.5, centerY - radius * 0.5],
+                    [centerX - radius * 0.5, centerY + radius * 0.5],
+                    [centerX + radius * 0.5, centerY + radius * 0.5]
+                ];
+
+                positions.forEach((pos, i) => {
+                    ctx.fillStyle = dotColors[i];
+                    ctx.beginPath();
+                    ctx.arc(pos[0], pos[1], radius * 0.08, 0, 2 * Math.PI);
+                    ctx.fill();
+                });
+            }
+
+            // Download the icon
+            const link = document.createElement('a');
+            link.download = canvasId.replace('icon', 'icon') + '.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        // Create all icons
+        setTimeout(() => {
+            createIcon('icon128', 128);
+            createIcon('icon48', 48);
+            createIcon('icon16', 16);
+        }, 100);
+    </script>
+</body>
+</html>
